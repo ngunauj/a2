@@ -26,7 +26,7 @@ ll dfs(ll x) {
 int main() {
 	int  n, l, r;
 	while (cin >> l >> r && l != -1 && r != -1) {
-		cout << dfs(r) - dfs(l-1)<< endl;
+		cout << dfs(r+1) - dfs(l)<< endl;
 	}
 	return 0;
 }
