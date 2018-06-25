@@ -8,53 +8,38 @@ using namespace std;
 #define INF 0x3f3f3f3f
 int dp[510][510];
 int a[510][510];
-int pre[510][510];
-int ans = 0;
-
-void dfs(int x, int y) {
-	if (x == 1 || y == 1) {
-		return ;
+int n, m;
+int dfs(int x, int y) {
+	if (x == n && y == m) {
+		return a[n][m];
 	}
-	if (pre[x][y] == -1) {
-		if (a[x][y] < 0) ans = max(abs(a[x][y]-dp[x-1][y]), ans);
-		dfs(x-1, y);
-	}
-	else if (pre[x][y] == 1) {
-		if (a[x][y] < 0) ans = max(abs(dp[x][y]-dp[x][y-1]), ans);
-		dfs(x, y-1);
-	}
+	if (x > n || y > m) return 1000000;
+	if (dp[x][y] != 0) return dp[x][y];
+	dp[x][y] = max(1, min(dfs(x+1, y), dfs(x, y+1)) - a[x][y]);
+	return dp[x][y];
 }
 
 int main() {
-	int t, n, m;
+	int t;
 	cin >> t;
 	while (t--) {
-		ans = 0;
-		memset(dp, -INF, sizeof dp);
+		memset(dp, 0, sizeof dp);
 		cin >> n >> m;
 		for (int i = 1; i <= n; ++i) {
 			for (int j = 1; j <= m; ++j) {
 				cin >> a[i][j];
 			}
 		}
-
-		for (int i = 0; i <= m; ++i) dp[0][i] = 0;
-		for (int i = 0; i <= n; ++i) dp[i][0] = 0;
+		a[n][m] = max(1, a[n][m]);
+		cout << dfs(1, 1) << endl;
+		/*
 		for (int i = 1; i <= n; ++i) {
 			for (int j = 1; j <= m; ++j) {
-				if (dp[i-1][j] > dp[i][j-1]) {
-					dp[i][j] = dp[i-1][j];
-					pre[i][j] = -1;
-				}
-				else {
-					dp[i][j] = dp[i][j-1];
-					pre[i][j] = 1;
-				}
-				dp[i][j] += a[i][j];
+				cout << dp[i][j] << " ";
 			}
+			cout << endl;
 		}
-		dfs(n, m);
-		cout << ans << endl;
+		*/
 	}
 	return 0;
 }
